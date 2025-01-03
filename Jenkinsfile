@@ -1,5 +1,5 @@
 pipeline {
-     agent { label 'slave' }
+    agent { label 'slave' }
 
     environment {
         JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64'
@@ -37,10 +37,23 @@ pipeline {
             }
         }
 
+       // stage('Upload Artifact') {
+       //     steps {
+       //         echo 'Uploading artifact...'
+       //         archiveArtifacts artifacts: 'target/simple-parcel-service-app-1.0-SNAPSHOT.jar', allowEmptyArchive: true
+       //     }
+       // }
+
         stage('Upload Artifact') {
             steps {
-                echo 'Uploading artifact...'
-                archiveArtifacts artifacts: 'target/simple-parcel-service-app-1.0-SNAPSHOT.jar', allowEmptyArchive: true
+                script {
+                    // Define the default artifact location
+                    def artifactPath = 'target/*.jar'
+        
+                    // Use a pipeline parameter or dynamically set the artifactPath for flexibility
+                    echo "Uploading artifact from: ${artifactPath}"
+                    archiveArtifacts artifacts: artifactPath, allowEmptyArchive: true
+                }
             }
         }
 
